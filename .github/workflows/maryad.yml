@@ -47,11 +47,15 @@ jobs:
             echo "No eligible new poems found"
           fi
 
+
       - name: Prepare public web directory
         run: |
-          mkdir -p public
+          mkdir -p public/admin
           cp index.html public/index.html
+          cp admin/index.html public/admin/index.html
+          cp admin/config.yml public/admin/config.yml
           touch public/.nojekyll
+
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
