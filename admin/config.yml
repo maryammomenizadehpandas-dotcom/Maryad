@@ -4,9 +4,14 @@ backend:
   
   turbo_site_id: 46d65128-3271-4ae3-be67-881527d14b5a
 
+  
   branch: main
 
+media_folder: "public/media"
+public_folder: "/Maryad/media"
+
 locale: fa
+
 
 collections:
   - name: posts
