@@ -1,0 +1,54 @@
+
+backend:
+  name: turbo-github
+  turbo_site_id: REPLACE_LATER
+  branch: main
+
+locale: fa
+
+collections:
+  - name: posts
+    label: "مطالب مریاد"
+    label_singular: "مطلب"
+    folder: content/posts
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: "{{slug}}"
+    fields:
+      - label: "عنوان مطلب"
+        name: title
+        widget: string
+      - label: "دسته‌بندی"
+        name: cat
+        widget: select
+        options:
+          - {label: "شعر کلاسیک", value: poetry}
+          - {label: "شعر معاصر", value: modern}
+          - {label: "نقد ادبی", value: criticism}
+          - {label: "مقاله و آموزش", value: learning}
+          - {label: "دانشنامه", value: encyclopedia}
+          - {label: "معرفی شاعر", value: poets}
+      - label: "شاعر یا نویسنده"
+        name: person
+        widget: string
+      - label: "خلاصه"
+        name: excerpt
+        widget: text
+        required: false
+      - label: "متن کامل"
+        name: body
+        widget: text
+      - label: "منبع"
+        name: source
+        widget: string
+        required: false
+      - label: "پیش‌نویس"
+        name: draft
+        widget: boolean
+        default: false
+      - label: "شناسه داخلی"
+        name: id
+        widget: hidden
+        required: false
