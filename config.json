@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "mode": "auto",
+  "poems_per_day": 2,
+  "maximum_poem_characters": 4000,
+  "maximum_candidate_requests": 16
+}

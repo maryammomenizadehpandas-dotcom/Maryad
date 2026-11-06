@@ -1,0 +1,66 @@
+name: Maryad Daily Publisher
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # 09:17 UTC every day (12:47 Iran time)
+    - cron: '17 9 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: maryad-pages
+  cancel-in-progress: false
+
+jobs:
+  publish-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Get website source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Add validated Ganjoor poems on schedule or manual run
+        if: github.event_name != 'push'
+        run: python3 scripts/publish.py
+
+      - name: Store the updated articles in GitHub
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "Maryad Publisher"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if [ -f pending-review.json ]; then git add pending-review.json; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "content: add reviewed-by-rules classical poems"
+            git push
+          else
+            echo "No eligible new poems found"
+          fi
+
+      - name: Prepare public web directory
+        run: |
+          mkdir -p public
+          cp index.html public/index.html
+          touch public/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload only public web files
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
